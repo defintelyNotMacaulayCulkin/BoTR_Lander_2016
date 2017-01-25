@@ -35,7 +35,7 @@ def recv_cycle():
 	buf = recv_function(MAX_PACK_SIZE, recv_timeout)
 	
 
-	if len(buf) == 0:
+	if (buf is None) or (len(buf) == 0):
 		return
 	else if not check_checksum(buf):
 		return
