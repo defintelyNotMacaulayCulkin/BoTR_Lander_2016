@@ -13,5 +13,12 @@ int get_humidity (void);
 void altimeter_setup (int pin1, int pin2);
 double get_altitude (void);
 
-void photo_setup (int pin);
+void light_setup (int pin);
 int get_light (void);
+
+void camera_setup (int pin1, int pin2);
+void get_image (char* buf);
+
+void xbee_setup (int pin1, int pin2);
+void xbee_send (char* buf, int len);
+void xbee_recv (char* buf, int len, int timeout);
