@@ -1,15 +1,15 @@
 def ones_checksum(packet_bytes):
 	checksum = 0
 
-	if len(packet_bytes) % 2 == 1
+	if len(packet_bytes) % 2 == 1:
 		packet_bytes = packet_bytes + bytearray(1)
 
-	for i in range(0, len(packet_bytes)/2)
+	for i in range(0, len(packet_bytes)/2):
 		current_word = packet_bytes[i*2] << 8
 		current_word |= packet_bytes[i*2 + 1]
 
 		checksum += current_word
-		if (checksum >> 16) == 1
+		if (checksum >> 16) == 1:
 			checksum = checksum & 0xFFFF
 			checksum += 1
 

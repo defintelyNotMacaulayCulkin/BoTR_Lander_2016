@@ -1,5 +1,5 @@
 from struct import *
-import checksum
+from checksum import *
 
 PACK_ACK = 2
 PACK_DAT = 3

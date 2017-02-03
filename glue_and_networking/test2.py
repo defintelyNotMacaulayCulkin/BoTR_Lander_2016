@@ -1,4 +1,4 @@
-import rdt
+from rdt import *
 import socket
 import sys
 import time
@@ -13,7 +13,7 @@ mysocket.connect((myhost, myport))
 poller = select.poll()
 poller.register(mysocket, select.POLLIN | select.POLLPRI | select.POLLHUP | select.POLLERR)
 
-def my_recv_function(size, timeout)
+def my_recv_function(size, timeout):
 	poll_results = poller.poll(timeout)
 	if len(poll_results) != 0:
 		return bytearray(mysocket.recv(size))
@@ -24,7 +24,7 @@ initialize(my_recv_function, mysocket.send, 10, 10)
 
 tmp = None
 
-while not can_send
+while not can_send:
 	dispatch()
 
 send_data("Hello world!")

@@ -1,5 +1,5 @@
-import packet
-import checksum
+from packet import *
+from checksum import *
 
 can_send = True
 recv_timeout = 0
@@ -37,35 +37,35 @@ def recv_cycle():
 
 	if (buf is None) or (len(buf) == 0):
 		return
-	else if not check_checksum(buf):
+	elif not check_checksum(buf):
 		return
 	else:
 		parsed_packet = unpack_packet(buf)
 
 		if parsed_packet[2] == PACK_UNK:
 			return
-		else if parsed_packet[2] == PACK_ACK:
+		elif parsed_packet[2] == PACK_ACK:
 			if parsed_packet[3] == send_seq:
 				can_send = True
 				has_unack_data = False
 
-				send_seq++
+				send_seq += 1
 
 				reset_counter = 0
-			else if parsed_packet[3] == 0:
-				reset_counter++
-		else if parsed_packet[2] == PACK_DAT:
+			elif parsed_packet[3] == 0:
+				reset_counter += 1
+		elif parsed_packet[2] == PACK_DAT:
 			if parsed_packet[3] == recv_seq:
 				global to_recv
 
 				to_recv[:] = buf
 				recv_new_data = True
 
-				recv_seq++
+				recv_seq += 1
 
 				reset_counter = 0
-			else if parsed_packet[3] == 0
-				reset_counter++
+			elif parsed_packet[3] == 0:
+				reset_counter += 1
 
 			send_function(create_packet(bytearray(0), PACK_ACK, recv_seq - 1))
 
@@ -82,7 +82,7 @@ def send_cycle():
 	send_function(to_send)
 
 def recv_data():
-	if not recv_new_data
+	if not recv_new_data:
 		return None
 
 	recv_new_data = False
@@ -92,10 +92,10 @@ def recv_data():
 	return recv_data_buf
 
 def send_data(data):
-	if not can_send
+	if not can_send:
 		return
 
-	if len(data) + header_size > MAX_PACK_SIZE
+	if len(data) + header_size > MAX_PACK_SIZE:
 		return
 
 	to_send[:] = create_packet(data, PACK_DAT, send_seq)

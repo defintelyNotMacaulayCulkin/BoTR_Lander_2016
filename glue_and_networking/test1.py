@@ -1,11 +1,11 @@
-import rdt
+from rdt import *
 import socket
 import sys
 import time
 
 mysocket = None
 myport = 5050
-myhost = None
+myhost = ''
 
 mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 mysocket.bind((myhost, myport))
@@ -15,7 +15,7 @@ connection, addr = mysocket.accept()
 poller = select.poll()
 poller.register(connection, select.POLLIN | select.POLLPRI | select.POLLHUP | select.POLLERR)
 
-def my_recv_function(size, timeout)
+def my_recv_function(size, timeout):
 	poll_results = poller.poll(timeout)
 	if len(poll_results) != 0:
 		return bytearray(connection.recv(size))
@@ -33,12 +33,12 @@ while tmp is None:
 
 print tmp + "\n"
 
-while not can_send
+while not can_send:
 	dispatch()
 
 send_data("Goodbye world!")
 
-while not can_send
+while not can_send:
 	dispatch()
 
 close(connection)
