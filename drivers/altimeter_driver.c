@@ -1,9 +1,23 @@
 #include "drivers.h"
+#include "Wire.h"
+#include "Adafruit_BMP085.h"
+/*^download above libraries from adafruit github, also BMP085 works for BMP180*/
 
-void altimeter_setup (int pin1, int pin2)
+/*BMP180 Barometric Pressure/Temperature/Altitude Sensor*/
+
+float initial_pressure;
+
+/*need to input current air pressure @ sea level for accurate reading*/
+void altimeter_setup (int pin1, int pin2, float currentAirPressure)
 {
+  Serial.begin(9600);
+  bmp.begin();
+  initial_pressure=currentAirPressure;
 }
 
-double get_altitude (void)
+float get_altitude (void)
 {
+  sensors_event_t event;
+  bmp.getEvent(&event);
+  return bmp.pressureToAltitude(initial_pressure,event.pressure);
 }
