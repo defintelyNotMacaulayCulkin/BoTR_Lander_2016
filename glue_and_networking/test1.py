@@ -2,6 +2,7 @@ from rdt import *
 import socket
 import sys
 import time
+import select
 
 mysocket = None
 myport = 5050

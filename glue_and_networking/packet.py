@@ -11,11 +11,17 @@ header_format = '<HHBB'
 header_size = 6
 
 def create_packet(to_packetize, packet_type, seq_num):
-	tmp = pack(header_format + str(len(to_packetize)) + 's', 0, len(to_packetize) + header_size, packet_type, seq_num)
+	global header_format
+	global header_size
+
+	tmp = bytearray(pack(header_format + str(len(to_packetize)) + 's', 0, len(to_packetize) + header_size, packet_type, seq_num, to_packetize))
 	new_checksum = ones_checksum(tmp)
-	return pack(header_format + str(len(to_packetize)) + 's', new_checksum, len(to_packetize) + header_size, packet_type, seq_num)
+	return bytearray(pack(header_format + str(len(to_packetize)) + 's', new_checksum, len(to_packetize) + header_size, packet_type, seq_num, to_packetize))
 
 def unpack_packet(to_unpack):
+	global header_format
+	global header_size
+
 	length = to_unpack[2] << 8
 	length |= to_unpack[3]
 

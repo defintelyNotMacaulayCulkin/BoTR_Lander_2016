@@ -2,10 +2,11 @@ from rdt import *
 import socket
 import sys
 import time
+import select
 
 mysocket = None
 myport = 5050
-myhost = str(sys.argv[0])
+myhost = str(sys.argv[1])
 
 mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 mysocket.connect((myhost, myport))

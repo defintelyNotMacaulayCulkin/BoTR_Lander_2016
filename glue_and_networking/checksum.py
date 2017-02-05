@@ -15,7 +15,7 @@ def ones_checksum(packet_bytes):
 
 	checksum = ~checksum
 
-	return checksum
+	return checksum & 0xFFFF
 
 def check_checksum(packet_bytes):
 	transmitted_checksum = packet_bytes[0] << 8
