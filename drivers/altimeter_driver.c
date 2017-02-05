@@ -8,16 +8,13 @@
 float initial_pressure;
 
 /*need to input current air pressure @ sea level for accurate reading*/
-void altimeter_setup (int pin1, int pin2, float currentAirPressure)
+void altimeter_setup (int pin1, int pin2)
 {
   Serial.begin(9600);
   bmp.begin();
-  sensors_event_t event;
-  bmp.getEvent(&event);
-  initial_pressure=event.pressure;
 }
 
 float get_altitude (void)
 {
-  return bmp.pressureToAltitude(initial_pressure,event.pressure);
+  return bmp.pressureToAltitude(SENSORS_PRESSURE_SEALEVELHPA,event.pressure);
 }
