@@ -12,12 +12,12 @@ void altimeter_setup (int pin1, int pin2, float currentAirPressure)
 {
   Serial.begin(9600);
   bmp.begin();
-  initial_pressure=currentAirPressure;
+  sensors_event_t event;
+  bmp.getEvent(&event);
+  initial_pressure=event.pressure;
 }
 
 float get_altitude (void)
 {
-  sensors_event_t event;
-  bmp.getEvent(&event);
   return bmp.pressureToAltitude(initial_pressure,event.pressure);
 }
