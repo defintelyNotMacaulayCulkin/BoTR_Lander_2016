@@ -18,8 +18,8 @@ def ones_checksum(packet_bytes):
 	return checksum & 0xFFFF
 
 def check_checksum(packet_bytes):
-	transmitted_checksum = packet_bytes[0] << 8
-	transmitted_checksum |= packet_bytes[1]
+	transmitted_checksum = packet_bytes[0]
+	transmitted_checksum |= packet_bytes[1] << 8
 
 	packet_bytes[0] = 0
 	packet_bytes[1] = 0
