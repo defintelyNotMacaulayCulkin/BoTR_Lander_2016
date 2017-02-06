@@ -14,9 +14,9 @@ def create_packet(to_packetize, packet_type, seq_num):
 	global header_format
 	global header_size
 
-	tmp = bytearray(pack(header_format + str(len(to_packetize)) + 'p', 0, len(to_packetize) + header_size, packet_type, seq_num, str(to_packetize)))
+	tmp = bytearray(pack(header_format + str(len(to_packetize)) + 's', 0, len(to_packetize) + header_size, packet_type, seq_num, str(to_packetize)))
 	new_checksum = ones_checksum(tmp)
-	return bytearray(pack(header_format + str(len(to_packetize)) + 'p', new_checksum, len(to_packetize) + header_size, packet_type, seq_num, str(to_packetize)))
+	return bytearray(pack(header_format + str(len(to_packetize)) + 's', new_checksum, len(to_packetize) + header_size, packet_type, seq_num, str(to_packetize)))
 
 def unpack_packet(to_unpack):
 	global header_format
@@ -26,6 +26,6 @@ def unpack_packet(to_unpack):
 	length |= to_unpack[3] << 8
 
 	if (length - header_size) > 0:
-		return unpack(header_format + str(length - header_size) + 'p', to_unpack)
+		return unpack(header_format + str(length - header_size) + 's', to_unpack)
 	else:
 		return unpack(header_format, to_unpack)
