@@ -25,7 +25,7 @@ initialize(my_recv_function, mysocket.send, 10, 10)
 
 tmp = None
 
-while not can_send:
+while not done_sending():
 	dispatch()
 
 send_data("Hello world!")

@@ -3,7 +3,7 @@
 
 uint16_t ones_checksum (char* packet_bytes, int len)
 {
-	uint16_t checksum = 0;
+	uint32_t checksum = 0;
 	uint16_t current_word;
 	int i = 0;
 
@@ -25,7 +25,7 @@ uint16_t ones_checksum (char* packet_bytes, int len)
 
 	checksum = ~checksum;
 
-	return checksum;
+	return checksum & 0xFFFF;
 }
 
 char check_checksum (char* packet_bytes, int len)

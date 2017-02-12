@@ -34,12 +34,12 @@ while tmp is None:
 
 print tmp + "\n"
 
-while not can_send:
+while not done_sending():
 	dispatch()
 
 send_data("Goodbye world!")
 
-while not can_send:
+while not done_sending():
 	dispatch()
 
-close(connection)
+connection.close()

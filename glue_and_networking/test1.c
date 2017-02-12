@@ -33,7 +33,7 @@ int main (int argc, char** argv)
 	socket_fd = accept (welcome_fd, (struct sockaddr*)&client_addr, &client_len);
 
 	initialize (__recv_function, __send_function, 10000, 10000);
-
+	
 	while (!tmp)
 	{
 		dispatch ();

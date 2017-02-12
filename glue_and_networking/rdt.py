@@ -19,36 +19,11 @@ def initialize(__recv_function, __send_function, __recv_timeout, __send_timeout)
 	global send_function
 	global recv_timeout
 	global send_timeout
-	global can_send
-	global to_send
-	global to_recv
-	global recv_data_buf
-	global send_data_len
-	global recv_new_data
-	global has_unack_data
-	global send_seq
-	global recv_seq
-	global reset_counter
-	global RESET_LIMIT
-	global MAX_PACK_SIZE
 
 	recv_function = __recv_function
 	send_function = __send_function
 	recv_timeout = __recv_timeout
 	send_timeout = __send_timeout
-
-	can_send = True
-	to_send = bytearray(MAX_PACK_SIZE)
-	to_recv = bytearray(MAX_PACK_SIZE)
-	recv_data_buf = bytearray(MAX_PACK_SIZE)
-	send_data_len = 0
-	recv_new_data = False
-	has_unack_data = False
-	send_seq = 0
-	recv_seq = 0
-	reset_counter = 0
-
-	RESET_LIMIT = 10
 
 
 def recv_cycle():
@@ -57,12 +32,8 @@ def recv_cycle():
 	global recv_timeout
 	global send_timeout
 	global can_send
-	global to_send
 	global to_recv
-	global recv_data_buf
-	global send_data_len
 	global recv_new_data
-	global has_unack_data
 	global send_seq
 	global recv_seq
 	global reset_counter
@@ -75,7 +46,6 @@ def recv_cycle():
 	buf = bytearray(MAX_PACK_SIZE)
 
 	buf = recv_function(MAX_PACK_SIZE, recv_timeout)
-	
 
 	if (buf is None) or (len(buf) == 0):
 		return
@@ -118,21 +88,8 @@ def recv_cycle():
 
 
 def send_cycle():
-	global recv_function
-	global send_function
-	global recv_timeout
-	global send_timeout
-	global can_send
 	global to_send
-	global to_recv
-	global recv_data_buf
-	global send_data_len
-	global recv_new_data
 	global has_unack_data
-	global send_seq
-	global recv_seq
-	global reset_counter
-	global RESET_LIMIT
 
 	if not has_unack_data:
 		return
@@ -140,47 +97,24 @@ def send_cycle():
 	send_function(to_send)
 
 def recv_data():
-	global recv_function
-	global send_function
-	global recv_timeout
-	global send_timeout
-	global can_send
-	global to_send
 	global to_recv
 	global recv_data_buf
-	global send_data_len
 	global recv_new_data
-	global has_unack_data
-	global send_seq
-	global recv_seq
-	global reset_counter
-	global RESET_LIMIT
 
 	if not recv_new_data:
 		return None
 
 	recv_new_data = False
 
-	recv_data_buf[:] = unpack_packet(to_recv)[4]
+	recv_data_buf[:] = bytearray(unpack_packet(to_recv)[4])
 
 	return recv_data_buf
 
 def send_data(data):
-	global recv_function
-	global send_function
-	global recv_timeout
-	global send_timeout
 	global can_send
-	global to_send
-	global to_recv
-	global recv_data_buf
-	global send_data_len
-	global recv_new_data
 	global has_unack_data
+	global to_send
 	global send_seq
-	global recv_seq
-	global reset_counter
-	global RESET_LIMIT
 	global MAX_PACK_SIZE
 	global PACK_DAT
 
@@ -198,3 +132,8 @@ def send_data(data):
 def dispatch():
 	send_cycle()
 	recv_cycle()
+
+def done_sending():
+	global can_send
+
+	return can_send
