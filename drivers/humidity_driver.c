@@ -5,10 +5,11 @@
 
 //here is where to find actually useful info -->  https://github.com/adafruit/DHT-sensor-library/blob/master/examples/DHTtester/DHTtester.ino
 
+DHT dht;
+
 void humidity_setup (int pin)
 {
-  Serial.begin(9600);
-  DHT dht(pin, DHT11);
+  dht = new dht(pin, DHT11);
   dht.begin();
 }
 /*apparently takes 250ms to read humidity*/
