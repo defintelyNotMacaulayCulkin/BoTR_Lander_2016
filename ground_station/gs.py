@@ -22,7 +22,7 @@ print("imported successfully")
 ###
 
 
-#continuously plots the result of a given function, once per second
+### continuously plots the result of a given function, once per second
 def plot_cont(func, xmax):
     y = []
     fig = plt.figure()
@@ -40,7 +40,7 @@ def plot_cont(func, xmax):
     plt.show()
 
 
-### displays an image from the local directory and outputs its properties
+### displays an image from the local directory and prints out its properties
 def showimage(filename):
     im = Image.open(filename)
     print(im.format, im.size, im.mode)
@@ -72,7 +72,7 @@ def rand():
 
 
 if __name__ == '__main__':
-    images = [Image.open("hot.jpg"), Image.open("nothot.jpg"), Image.open("hot.jpg")]
+    images = [Image.open("hot.jpg"), Image.open("not_hot.jpg"), Image.open("hot.jpg")]
 ##    Thread(target = plot_cont(rand, 999)).start()       
 ##    Thread(target = panorama(images)).start()
     plotpr = Process(target=plot_cont, args=(rand, 999))
