@@ -1,0 +1,4 @@
+=  BoTR_Lander_2016
+
+Code for the Planetary Lander section of the 2016-17 Battle of the Rockets competition
+
