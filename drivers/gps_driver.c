@@ -1,73 +1,56 @@
-#include <Drivers.h>
 #include <Adafruit_GPS.h>
+#include <Drivers.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial mySerial(3, 2);
-Adafruit_GPS GPS(&mySerial);
-
-uint32_t timer = millis();
+SoftwareSerial* mySerial;
+Adafruit_GPS* GPS;
 
 void gps_setup (int pin1, int pin2)
 {
+
+  mySerial = new SoftwareSerial(3, 2);
+  GPS = new Adafruit_GPS(mySerial);
+
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
-  GPS.begin(9600);
+  GPS->begin(9600);
+  
 
   // uncomment this line to turn on only the "minimum recommended" data
-  PS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  GPS->sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
  
   // Set the update rate
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
+  GPS->sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
   // For the parsing code to work nicely and have time to sort thru the data, and
   // print it out we don't suggest using anything higher than 1 Hz
+
+  GPS->sendCommand(PGCMD_ANTENNA);
+
+  TIMSK0 &= ~_BV(OCIE0A);
+
+  delay(1000);
+
+  mySerial->println(PMTK_Q_RELEASE);
 }
+
 
 struct gps_coord get_gps_coords (void)
 {
-  char c = GPS.read();
-  
-  // if a sentence is received, we can check the checksum, parse it...
-  if (GPS.newNMEAreceived()) {
+// if a sentence is received, we can check the checksum, parse it...
+  while (!GPS->newNMEAreceived())
+  {
+	delay(20);
+        GPS->read();
+  }
     // a tricky thing here is if we print the NMEA sentence, or data
     // we end up not listening and catching other sentences! 
     // so be very wary if using OUTPUT_ALLDATA and trytng to print out data
     //Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived() flag to false
   
-    if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
-      return;  // we can fail to parse a sentence in which case we should just wait for another
-  }
+  GPS->parse(GPS->lastNMEA());   // this also sets the newNMEAreceived() flag to false
+      //return ;  // we can fail to parse a sentence in which case we should just wait for another
 
-  // if millis() or timer wraps around, we'll just reset it
-  if (timer > millis())  timer = millis();
-
-  // approximately every 2 seconds or so, print out the current stats
-  if (millis() - timer > 1000{ 
-    timer = millis(); // reset the timer
-    
-    Serial.print("\nTime: ");
-    Serial.print(GPS.hour, DEC); Serial.print(':');
-    Serial.print(GPS.minute, DEC); Serial.print(':');
-    Serial.print(GPS.seconds, DEC); Serial.print('.');
-    Serial.println(GPS.milliseconds);
-    Serial.print("Date: ");
-    Serial.print(GPS.day, DEC); Serial.print('/');
-    Serial.print(GPS.month, DEC); Serial.print("/20");
-    Serial.println(GPS.year, DEC);
-    Serial.print("Fix: "); Serial.print((int)GPS.fix);
-    Serial.print(" quality: "); Serial.println((int)GPS.fixquality); 
-    if (GPS.fix) {
-      Serial.print("Location: ");
-      Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
-      Serial.print(", "); 
-      Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
-      Serial.print("Location (in degrees, works with Google Maps): ");
-      Serial.print(GPS.latitudeDegrees, 4);
-      Serial.print(", "); 
-      Serial.println(GPS.longitudeDegrees, 4);
-      
-      Serial.print("Speed (knots): "); Serial.println(GPS.speed);
-      Serial.print("Angle: "); Serial.println(GPS.angle);
-      Serial.print("Altitude: "); Serial.println(GPS.altitude);
-      Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
-    }
-  }
+  struct gps_coord my_coord;
+  my_coord.latitude = GPS->latitude;
+  my_coord.longitude = GPS->longitude; 
+  return my_coord;
 }
