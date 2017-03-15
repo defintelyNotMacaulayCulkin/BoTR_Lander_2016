@@ -9,12 +9,16 @@ struct gps_coord get_gps_coords (void);
 
 void humidity_setup (int pin);
 int get_humidity (void);
+double get_temperature(bool farenheight);
 
 void altimeter_setup (int pin1, int pin2);
 double get_altitude (void);
 
 void light_setup (int pin);
 int get_light (void);
+
+void voltmeter_setup (int pin);
+double get_voltage (void);
 
 void camera_setup (int pin1, int pin2);
 void camera_read (void (*callback)(char*, int, char, void*), void* parameter); //Parameters for the callback function: byte buffer, number of bytes in buffer, whether this is the last readout or not, user provided parameter
@@ -25,3 +29,11 @@ void camera_read (void (*callback)(char*, int, char, void*), void* parameter); /
 void xbee_setup (int pin1, int pin2);
 void xbee_send (char* buf, int len);
 void xbee_recv (char* buf, int len, int timeout);
+
+void setup_pyrochannel (int channel_number);
+void setup_continuity (int channel_number);
+void fire_pyrochannel (int channel_number);
+char check_pyro_continuity (int channel_number);
+
+void setup_watchdog (int pin);
+void reset_watchdog (int pin);
