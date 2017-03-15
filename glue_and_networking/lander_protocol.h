@@ -9,11 +9,11 @@
 struct telemetry_packet
 {
 	uint16_t magic;
-	double latitude;
-	double longitude;
+	float latitude;
+	float longitude;
 	uint16_t humidity;
-	double temperature;
-	double altitude;
+	float temperature;
+	float altitude;
 	uint16_t light;	
 };
 
